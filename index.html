@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+   button {
+     margin-top: 5px;
+   }
+</style>
+<title>Shopping Cart</title>
+</head>
+<body>
+<div id="product1">
+<h2>Product 1</h2>
+<p>Price: $20</p>
+<button onclick="addToCart(product1)">Add to Cart</button>
+</div>
+<div id="product2">
+<h2>Product 2</h2>
+<p>Price: $30</p>
+<button onclick="addToCart(product2)">Add to Cart</button>
+</div>
+<div id="cart">
+<h2>Shopping Cart</h2>
+<div id="cartContent"></div>
+<div id="totalPrice"></div> <!-- Add a separate div for total price -->
+</div>
+<script>
+ const product1 = {
+   name: 'Product 1',
+   price: 20,
+   quantity: 0,
+ };
+ const product2 = {
+   name: 'Product 2',
+   price: 30,
+   quantity: 0,
+ };
+ function addToCart(product) {
+   product.quantity++;
+   updateCartDisplay();
+ }
+ function removeFromCart(product) {
+   if (product.quantity > 0) {
+     product.quantity=0;
+     updateCartDisplay();
+   }
+ }
+ function increaseQuantity(product) {
+   product.quantity++;
+   updateCartDisplay();
+ }
+ function decreaseQuantity(product) {
+   if (product.quantity > 0) {
+     product.quantity--;
+     updateCartDisplay();
+   }
+ }
+ function updateCartDisplay() {
+   const cartContentElement = document.getElementById('cartContent');
+   const totalPriceElement = document.getElementById('totalPrice');
+   cartContentElement.innerHTML = '';
+   let totalCartPrice = 0;
+   [product1, product2].forEach(product => {
+     if (product.quantity > 0) {
+       const totalPrice = product.quantity * product.price;
+       totalCartPrice += totalPrice;
+       cartContentElement.innerHTML += `
+<div>
+           ${product.name}:
+<button onclick="increaseQuantity(product${product.name === 'Product 1' ? '1' : '2'})">+</button>
+           ${product.quantity}
+<button onclick="decreaseQuantity(product${product.name === 'Product 1' ? '1' : '2'})">-</button>
+           x $${product.price} = $${totalPrice}
+<button onclick="removeFromCart(product${product.name === 'Product 1' ? '1' : '2'})">Remove</button>
+</div>
+       `;
+     }
+   });
+   // Display total price
+   totalPriceElement.innerHTML = `Total Price: $${totalCartPrice}`;
+ }
+</script>
+</body>
+</html>
